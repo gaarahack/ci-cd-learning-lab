@@ -1,0 +1,37 @@
+name: First CI Pipeline
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate Website
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v7
+
+      - name: Show runner information
+        run: |
+          echo "CI pipeline started"
+          echo "Runner OS: $(uname -s)"
+          echo "Repository: $GITHUB_REPOSITORY"
+
+      - name: Check that homepage exists
+        run: test -f index.html
+
+      - name: Check HTML marker
+        run: grep -qi "<html" index.html
+
+      - name: Display success
+        run: echo "All checks passed!"
